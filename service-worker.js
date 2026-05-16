@@ -1,4 +1,4 @@
-const CACHE_NAME = "album-copa-v1";
+const CACHE_NAME = "calculo-hora-extra-v1";
 
 const urlsToCache = [
     "./",
