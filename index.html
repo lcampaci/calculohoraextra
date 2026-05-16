@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1565c0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Controle Hora Extra</title>
 
 <style>
@@ -349,14 +352,14 @@ function gerarTabela(){
             html += `
                 <td>
                     <input
-                        type="number"
-                        min="0"
-                        value="0"
-                        class="minuto"
-                        data-dia="${dia}"
-                        data-col="${i}"
-                        ${bloqueado ? "disabled" : ""}
-                    >
+    type="number"
+    min="0"
+    value=""
+    class="minuto"
+    data-dia="${dia}"
+    data-col="${i}"
+    ${bloqueado ? "disabled" : ""}
+>
                 </td>
             `;
         }
@@ -378,6 +381,8 @@ function gerarTabela(){
 
     calcularTudo();
 }
+
+
 
 function adicionarEventos(){
 
@@ -407,8 +412,8 @@ function calcularTudo(){
         tr.querySelectorAll(".minuto")
         .forEach(input => {
 
-            totalDia +=
-                Number(input.value) || 0;
+            const v = input.value.trim();
+totalDia += v === "" ? 0 : Number(v);
 
         });
 
@@ -473,7 +478,7 @@ function salvarTudo(){
             input.dataset.col;
 
         dados.minutos[chave] =
-            input.value;
+    input.value === "" ? "" : input.value;
     });
 
     localStorage.setItem(
@@ -511,8 +516,10 @@ function carregarDadosInputs(){
             dados.minutos[chave] !== undefined
         ){
 
-            input.value =
-                dados.minutos[chave];
+            const valor = dados.minutos[chave];
+
+input.value =
+    (valor === "0" || valor === 0) ? "" : valor;
         }
     });
 }
@@ -563,13 +570,19 @@ function exportarDados(){
         return;
     }
 
-    const blob = new Blob([dados], { type: "application/json" });
+    let nomeArquivo = "hora-extra-backup";
 
+    if (mesAno.value) {
+        const [ano, mes] = mesAno.value.split("-");
+        nomeArquivo = `hora-extra-${mes}_${ano}`;
+    }
+
+    const blob = new Blob([dados], { type: "application/json" });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "hora-extra-backup.json";
+    a.download = `${nomeArquivo}.json`;
     a.click();
 
     URL.revokeObjectURL(url);
