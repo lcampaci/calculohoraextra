@@ -1,7 +1,7 @@
 {
   "name": "Cálculo Hora Extra",
   "short_name": "Cálculo",
-  "start_url": "./",
+  "start_url": "./index.html",
   "display": "fullscreen",
   "background_color": "#0f172a",
   "theme_color": "#22c55e",
