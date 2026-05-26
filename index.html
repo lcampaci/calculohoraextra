@@ -117,9 +117,8 @@ input{
     color:#1565c0;
 }
 .tabelas{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
+    width:100%;
+    overflow-x:auto;
 }
 
 table{
@@ -182,9 +181,7 @@ td input{
 
 @media(max-width:900px){
 
-    .tabelas{
-        grid-template-columns:1fr;
-    }
+   
 }
 
 </style>
@@ -244,48 +241,30 @@ td input{
 
     <div class="tabelas">
 
-        <table>
+    <table>
 
-            <thead>
-                <tr>
-                    <th>D</th>
-                    <th>M1</th>
-                    <th>M2</th>
-                    <th>M3</th>
-                    <th>M4</th>
-                    <th>T</th>
-                </tr>
-            </thead>
+        <thead>
+            <tr>
+                <th>D</th>
+                <th>M1</th>
+                <th>M2</th>
+                <th>M3</th>
+                <th>M4</th>
+                <th>T</th>
+            </tr>
+        </thead>
 
-            <tbody id="tabela1"></tbody>
+        <tbody id="tabela"></tbody>
 
-        </table>
+    </table>
 
-        <table>
-
-            <thead>
-                <tr>
-                    <th>D</th>
-                    <th>M1</th>
-                    <th>M2</th>
-                    <th>M3</th>
-                    <th>M4</th>
-                    <th>T</th>
-                </tr>
-            </thead>
-
-            <tbody id="tabela2"></tbody>
-
-        </table>
-
-    </div>
+</div>
 
 </div>
 
 <script>
 
-const tabela1 = document.getElementById("tabela1");
-const tabela2 = document.getElementById("tabela2");
+const tabela = document.getElementById("tabela");
 const mesAno = document.getElementById("mesAno");
 const salario = document.getElementById("salario");
 
@@ -307,8 +286,7 @@ function feriados(ano){
 
 function gerarTabela(){
 
-    tabela1.innerHTML = "";
-    tabela2.innerHTML = "";
+    tabela.innerHTML = "";
 
     if(!mesAno.value) return;
 
@@ -316,9 +294,6 @@ function gerarTabela(){
 
     const diasNoMes =
         new Date(ano, mes, 0).getDate();
-
-    const metade =
-        Math.ceil(diasNoMes / 2);
 
     const listaFeriados =
         feriados(ano);
@@ -370,11 +345,7 @@ function gerarTabela(){
 
         tr.innerHTML = html;
 
-        if(dia <= metade){
-            tabela1.appendChild(tr);
-        }else{
-            tabela2.appendChild(tr);
-        }
+        tabela.appendChild(tr);
     }
 
     carregarDadosInputs();
