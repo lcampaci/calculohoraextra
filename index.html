@@ -218,6 +218,11 @@ td input{
     <input type="file" accept="application/json" onchange="importarDados(event)" style="display:none;">
 </label>
 
+      <a href="historico.html" class="btn salvar"
+style="text-decoration:none;display:flex;align-items:center;">
+    Histórico
+</a>
+
     </div>
 
     <div class="resumo">
@@ -432,14 +437,56 @@ totalDia += v === "" ? 0 : Number(v);
 
 function salvarTudo(){
 
+    if(!mesAno.value){
+        alert("Selecione o mês!");
+        return;
+    }
+
+    let total = 0;
+
+    document.querySelectorAll(".minuto")
+    .forEach(input => {
+
+        const valor =
+            input.value.trim();
+
+        total += valor === ""
+            ? 0
+            : Number(valor);
+    });
+
+    const horas =
+        Math.floor(total / 60);
+
+    const minutos =
+        total % 60;
+
+    const sal =
+        Number(salario.value) || 0;
+
+    const totalHoras =
+        total / 60;
+
+    const extra =
+        (sal / 220)
+        * 1.6
+        * totalHoras;
+
     const dados = {
 
         mesAno: mesAno.value,
 
         salario: salario.value,
 
-        minutos:{}
+        totalMinutos: total,
 
+        totalHorasTexto:
+            `${horas}h ${minutos}m`,
+
+        valorExtra:
+            extra.toFixed(2),
+
+        minutos:{}
     };
 
     document.querySelectorAll(".minuto")
@@ -451,8 +498,22 @@ function salvarTudo(){
             input.dataset.col;
 
         dados.minutos[chave] =
-    input.value === "" ? "" : input.value;
+            input.value === ""
+            ? ""
+            : input.value;
     });
+
+    let historico =
+        JSON.parse(
+            localStorage.getItem("historicoHoraExtra")
+        ) || {};
+
+    historico[mesAno.value] = dados;
+
+    localStorage.setItem(
+        "historicoHoraExtra",
+        JSON.stringify(historico)
+    );
 
     localStorage.setItem(
         "controleHoraExtra",
